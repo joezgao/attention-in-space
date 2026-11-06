@@ -10,7 +10,7 @@ It follows [micrograd 3D](https://github.com/joezgao/micrograd-3d): micrograd sh
 
 ## Open it
 
-Open `attention.html` in a recent browser. It is a single 1.17 MB file with the model weights inlined; it needs an internet connection to load three.js and two fonts. If your browser blocks local files:
+Open `attention.html` in a recent browser. It is a single 1.19 MB file with the model weights inlined; it needs an internet connection to load three.js and two fonts. If your browser blocks local files:
 
 ```bash
 python3 -m http.server 8000   # then open http://localhost:8000/attention.html
