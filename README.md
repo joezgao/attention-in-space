@@ -25,7 +25,7 @@ Try **Layer 2, Head 3**: it looks back about 13 characters on average and mostly
 
 ## The model
 
-| | |
+| | Value |
 |---|---|
 | Architecture | nanoGPT design: learned token and position embeddings, 4 pre-LayerNorm blocks (causal self-attention plus a 4× MLP with tanh-GELU), a final LayerNorm, and an `lm_head` tied to the token embedding |
 | Size | 4 layers, 4 heads, d_model 128, context 64 characters, vocab 65, **809,856 parameters** |
@@ -37,10 +37,10 @@ Try **Layer 2, Head 3**: it looks back about 13 characters on average and mostly
 
 A sample at temperature 0.8, after the prompt *"ROMEO: But soft, what light through yonder window breaks? JULIET:"*:
 
-> O Capulet, Aufidius,
-> And it is here loved so the state bird,
-> And set for yourself must this arty would show,
-> That which between her so his fingers
+> O Capulet, Aufidius,<br>
+> And it is here loved so the state bird,<br>
+> And set for yourself must this arty would show,<br>
+> That which between her so his fingers<br>
 > Upon him. But now heavens by this day,
 
 ## How the page works
