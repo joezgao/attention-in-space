@@ -1,6 +1,6 @@
 # Attention, in space
 
-![A tiny GPT writing Shakespeare: letters along the bottom, four layers of glowing amber attention arcs above them, next-character guesses along the top](screenshots/shot-2-generating.png)
+![Hovering the letter a in "temperate": layer 2 head 4 lights the space 7 letters back (82%), and a card lists its targets and the likely next letters](screenshots/shot-6-hover-v3.png)
 
 A tiny character-level GPT, trained from scratch on Shakespeare, running entirely in the browser. Type, and watch its attention in 3D.
 
@@ -17,11 +17,23 @@ python3 -m http.server 8000   # then open http://localhost:8000/attention.html
 ```
 
 - **Layer** (All, 1–4) and **Head** (1–4, Avg) pick which attention to draw.
+- Hover over a letter, or tap it on a phone, to see where it looks: its targets light up in amber in proportion to their share, and a card lists its top targets (over the full 64-character context) next to its top next characters.
+- **Tour** is five 8-second steps through the heads below, each following one example letter with its share computed live.
+- **How it was made** (under the stats, top right) opens a short note on the model, the data and the training.
 - Drag to orbit, scroll or pinch to zoom, double-click to reset.
 - **Write** lets the model write (temperature 0.8). On arrival it writes for about 9 seconds, then waits for you.
 - Narrow screens (under 720 px) show 16 letters instead of 32. `prefers-reduced-motion` turns off camera drift, scroll animation, easing and autoplay.
 
-Try **Layer 2, Head 3**: it looks back about 13 characters on average and mostly attends to the last space or line break, a word-boundary head.
+Measured on 4,096 held-out windows with the shipped weights, four heads stand out (the Tour shows exactly these):
+
+| Head | Attends to | Share |
+|---|---|---|
+| Layer 1, head 1 | the two letters just before | 61% |
+| Layer 2, head 4 | the last space: where the current word began | 81% |
+| Layer 2, head 3 | the last line break | 58% |
+| Layer 3, head 2 | vowels | 67% |
+
+No head was found for an induction pattern, the same letter earlier, or the start of the line (none puts more than 6% of its attention there), so the page doesn't claim one.
 
 ## The model
 
@@ -47,11 +59,11 @@ A sample at temperature 0.8, after the prompt *"ROMEO: But soft, what light thro
 
 - One HTML file. three.js 0.147.0 loads from jsDelivr; Lora and Inter load from Google Fonts. Everything else, weights included, is inline.
 - The forward pass is plain JavaScript in an inline Web Worker, so the 3D view never waits for the model. Each new character re-runs the last 64 characters and returns every layer's attention matrices and the next-character probabilities.
-- The arcs are one static ribbon mesh, one ribbon per (layer, query, key) pair, with widths computed in screen space in the vertex shader. Attention weights reach the GPU as a small float texture each frame and ease toward their new values.
+- The arcs are instanced ribbons with widths computed in screen space in the vertex shader. Attention weights ease on the CPU; arcs too faint to see are dropped (usually about 400 of 2,112 remain), and the page only draws a frame when the picture changes.
 
 ## Limits
 
-- 60 fps was not measured on real hardware. It was checked only with software WebGL (21–23 fps at 1440 px while writing); the per-frame JavaScript is small and the arc mesh is about 93k triangles, so a laptop GPU should manage 60.
+- 60 fps is not verified on a real GPU. It was only measured with software WebGL on 2 busy CPU cores: 10–14.5 fps at 1440 × 900 while writing (v1 managed 0.3–0.7). On a GPU the arcs are about 400 instanced ribbons (roughly 6k vertices) a frame, so 60 fps should be easy, but it needs checking on real hardware.
 - It is a 0.8M-parameter model with 64 characters of context: mostly right spelling and the right form (speaker names, line breaks), but the meaning is nonsense.
 - Only attention within the visible window is drawn; attention to characters that have scrolled out of view is not shown.
 - Characters outside the training vocabulary (most digits, for example) are dropped from what you type.
@@ -59,7 +71,7 @@ A sample at temperature 0.8, after the prompt *"ROMEO: But soft, what light thro
 ## In this repository
 
 - `attention.html`: the piece
-- `screenshots/`: typing, generating, an orbited view of layer 2 head 3, and a phone view
+- `screenshots/`: typing, generating, an orbited view, the phone layout, the Tour, hovering a letter (v3), a Tour step (v3) and the v3 phone layout
 
 The NumPy training, gradient-check and export scripts are not in this repository yet.
 
@@ -69,4 +81,4 @@ Model design after [nanoGPT](https://github.com/karpathy/nanoGPT) (MIT); trainin
 
 Code: MIT. See [LICENSE](LICENSE).
 
-Built with Claude.
+Built with Claude for Joe Gao.
