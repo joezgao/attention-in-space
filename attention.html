@@ -724,8 +724,8 @@ $('meta').innerHTML = `<span>${L}</span> layers · <span>${H}</span> heads · <s
 const S = MODEL.stats, pct = (v) => Math.round(v * 100) + '%';
 $('made-list').innerHTML = [
   `<b>${(MODEL.params / 1e6).toFixed(2)}M parameters</b>: ${L} layers of ${H} attention heads, ${MODEL.C} wide, reading ${CTX} characters at a time.`,
-  `Trained on <b>tiny-shakespeare</b> (1.1M characters) for <b>${MODEL.train_min} minutes</b> on two CPU cores.`,
-  `Written from scratch in <b>NumPy</b>, with a backward pass derived by hand and checked against finite differences.`,
+  `Trained on <b>tiny-shakespeare</b> (1.1M characters, from Karpathy’s char-rnn) for <b>${MODEL.train_min} minutes</b> on two CPU cores.`,
+  `The design follows Karpathy’s <b>nanoGPT</b>; the code is written from scratch in <b>NumPy</b>, with a backward pass derived by hand and checked against finite differences.`,
   `Validation loss <b>${MODEL.val_loss.toFixed(2)}</b>; its first guess at the next character is right <b>${pct(S.top1)}</b> of the time.`,
   `Weights stored as <b>int8</b> (${Math.round(MODEL.blob_kb)} kB) inside this one page.`,
   `Runs entirely <b>in your browser</b>: a Web Worker does the arithmetic and three.js draws it.`,
@@ -741,7 +741,7 @@ const VOWELS = new Set('aeiouAEIOU');
 const STEP_MS = 8000;
 const SAY = {
   prev2: (v) => `This head reads the two letters just before each one: they get ${pct(v)} of its attention.`,
-  word: (v) => `This head finds where the current word began: ${pct(v)} of its attention goes to the last space.`,
+  word: (v) => `This head finds where the current word began: ${pct(v)} of its attention goes to the last space or line break.`,
   line: (v) => `This head keeps its place in the line: ${pct(v)} of its attention goes to the last line break, a character that is only ${pct(S.newline_base)} of the text.`,
   vowel: (v) => `This head listens for vowels: they get ${pct(v)} of its attention, though they are only ${pct(S.vowel_base)} of the text.`,
 };

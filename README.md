@@ -31,7 +31,7 @@ Measured on 4,096 held-out windows with the shipped weights, four heads stand ou
 | Head | Attends to | Share |
 |---|---|---|
 | Layer 1, head 1 | the two letters just before | 61% |
-| Layer 2, head 4 | the last space: where the current word began | 81% |
+| Layer 2, head 4 | the last space or line break: where the current word began | 81% |
 | Layer 2, head 3 | the last line break | 58% |
 | Layer 3, head 2 | vowels | 67% |
 
