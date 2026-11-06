@@ -1,6 +1,8 @@
 # Attention, in space
 
-![Hovering the letter a in "temperate": layer 2 head 4 lights the space 7 letters back (82%), and a card lists its targets and the likely next letters](screenshots/shot-6-hover-v3.png)
+[![Attention, in space: amber attention arcs across four layers while the model writes Shakespeare](loop/attention-loop.gif)](loop/attention-loop.mp4)
+
+<sub>11-second loop. Click for the MP4 (1280×720, 1.7 MB); the GIF above is 960×540, 5.8 MB.</sub>
 
 A tiny character-level GPT, trained from scratch on Shakespeare, running entirely in the browser. Type, and watch its attention in 3D.
 
