@@ -12,7 +12,7 @@ It follows [micrograd 3D](https://github.com/joezgao/micrograd-3d): micrograd sh
 
 ## Open it
 
-Open `attention.html` in a recent browser. It is a single 1.19 MB file with the model weights inlined; it needs an internet connection to load three.js and two fonts. If your browser blocks local files:
+Open `attention.html` in a recent browser. It is a single 1.20 MB file with the model weights inlined; it needs an internet connection to load three.js and two fonts. If your browser blocks local files:
 
 ```bash
 python3 -m http.server 8000   # then open http://localhost:8000/attention.html
@@ -20,8 +20,8 @@ python3 -m http.server 8000   # then open http://localhost:8000/attention.html
 
 - **Layer** (All, 1–4) and **Head** (1–4, Avg) pick which attention to draw.
 - Hover over a letter, or tap it on a phone, to see where it looks: its targets light up in amber in proportion to their share, and a card lists its top targets (over the full 64-character context) next to its top next characters.
-- **Tour** is five 8-second steps through the heads below, each following one example letter with its share computed live.
-- **How it was made** (under the stats, top right) opens a short note on the model, the data and the training.
+- **Tour** is five 8-second steps through the heads below, each following one example letter with its share computed live. A tap, a click or <kbd>Esc</kbd> stops it.
+- **How it works** (under the stats, top right) opens a short note on the model, the data and the training; × or <kbd>Esc</kbd> closes it.
 - Drag to orbit, scroll or pinch to zoom, double-click to reset.
 - **Write** lets the model write (temperature 0.8). On arrival it writes for about 9 seconds, then waits for you.
 - Narrow screens (under 720 px) show 16 letters instead of 32. `prefers-reduced-motion` turns off camera drift, scroll animation, easing and autoplay.

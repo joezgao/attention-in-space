@@ -23,14 +23,14 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);overflow:hid
 body{font-family:var(--sans);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
 #stage{position:fixed;inset:0;display:block;width:100%;height:100%;touch-action:none;cursor:grab}
 #stage.dragging{cursor:grabbing}
-header{position:fixed;top:0;left:0;right:0;padding:28px 32px 0;pointer-events:none;
+header{position:fixed;top:0;left:0;right:0;padding:28px max(32px,env(safe-area-inset-right)) 0 max(32px,env(safe-area-inset-left));pointer-events:none;
   display:flex;justify-content:space-between;align-items:flex-start;gap:24px}
 h1{font-family:var(--serif);font-weight:400;font-style:italic;font-size:30px;letter-spacing:-.01em;margin:0 0 12px;line-height:1.1}
-.caption{margin:0;max-width:460px;font-size:13px;line-height:1.62;color:var(--dim)}
+.caption{margin:0;max-width:480px;font-size:13px;line-height:1.62;color:var(--dim)}
 .caption b{color:var(--fg);font-weight:500}
 .meta{font-size:11px;letter-spacing:.04em;color:#5d5d5d;text-align:right;line-height:1.7;white-space:nowrap;font-variant-numeric:tabular-nums}
 .meta span{color:var(--dim)}
-.dock{position:fixed;left:0;right:0;bottom:0;padding:0 32px 26px;display:flex;flex-direction:column;align-items:center;gap:14px;pointer-events:none}
+.dock{position:fixed;left:0;right:0;bottom:0;padding:0 max(32px,env(safe-area-inset-right)) max(26px,env(safe-area-inset-bottom)) max(32px,env(safe-area-inset-left));display:flex;flex-direction:column;align-items:center;gap:14px;pointer-events:none}
 .controls{display:flex;gap:28px;align-items:center;pointer-events:auto;flex-wrap:wrap;justify-content:center}
 .seg{display:flex;align-items:center;gap:2px}
 .seg-label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#5d5d5d;margin-right:8px}
@@ -55,6 +55,9 @@ textarea::placeholder{color:#555}
 .tourcap{position:absolute;left:0;right:0;bottom:0;opacity:0;pointer-events:none;border-top:1px solid var(--line);padding-top:14px;min-height:66px}
 .tc-meta{display:flex;align-items:center;gap:14px;font:500 10.5px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:#5d5d5d;margin-bottom:9px}
 .tc-meta b{color:var(--accent);font-weight:500}
+.tc-stop{color:#8b8b8b;white-space:nowrap}
+.tc-stop .k-touch{display:none}
+@media (hover:none),(pointer:coarse){.tc-stop .k-touch{display:inline}.tc-stop .k-mouse{display:none}}
 .tc-dash{display:flex;gap:4px;margin-left:auto}
 .tc-dash i{display:block;width:18px;height:2px;border-radius:1px;background:#262626;overflow:hidden}
 .tc-dash i.done{background:rgba(255,181,71,.45)}
@@ -66,19 +69,25 @@ textarea::placeholder{color:#555}
 body.touring .controls{opacity:0;pointer-events:none}
 body.touring .composer{opacity:0;pointer-events:none}
 body.touring .tourcap{opacity:1}
-.made{pointer-events:auto;font:inherit;letter-spacing:inherit;color:#5d5d5d;background:none;border:0;padding:0;margin-top:2px;cursor:pointer;
+/* a short phone in the tour: the header's caption steps aside so the stack keeps its size above the tour's caption */
+body.touring.tourtight .caption{display:none}
+.made{position:relative;pointer-events:auto;font:inherit;letter-spacing:inherit;color:#5d5d5d;background:none;border:0;padding:0;margin-top:2px;cursor:pointer;
   text-decoration:underline;text-decoration-color:#2e2e2e;text-underline-offset:3px;transition:color .25s}
 .made:hover,.made[aria-expanded="true"]{color:var(--fg)}
-.panel{position:fixed;top:96px;right:32px;width:min(380px,calc(100% - 32px));padding:20px 22px 18px;background:rgba(8,8,8,.92);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid #1f1f1f;border-radius:12px;
-  opacity:0;transform:translateY(-4px);pointer-events:none;transition:opacity .3s,transform .3s;z-index:5}
-.panel.on{opacity:1;transform:none;pointer-events:auto}
-.panel h2{margin:0 0 12px;font:italic 400 18px/1.2 var(--serif);color:var(--fg)}
+.made::after{content:"";position:absolute;inset:-13px -8px}
+.panel{position:fixed;top:24px;right:max(24px,env(safe-area-inset-right));width:min(420px,calc(100% - 32px));max-height:calc(100% - 48px);overflow:auto;
+  padding:22px 24px 20px;background:rgba(8,8,8,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid #1f1f1f;border-radius:12px;opacity:0;transform:translateY(-4px);pointer-events:none;visibility:hidden;
+  transition:opacity .3s,transform .3s,visibility 0s linear .3s;z-index:5;overscroll-behavior:contain}
+.panel.on{opacity:1;transform:none;pointer-events:auto;visibility:visible;transition:opacity .3s,transform .3s}
+.panel h2{margin:0 0 12px;font:italic 400 20px/1.2 var(--serif);color:var(--fg);outline:0}
 .panel ul{margin:0;padding:0;list-style:none}
 .panel li{font-size:12.5px;line-height:1.55;color:var(--dim);padding:5px 0;border-top:1px solid #161616}
 .panel li:first-child{border-top:0}
 .panel li b{color:var(--fg);font-weight:500}
-.panel .credit{margin:10px 0 0;padding-top:9px;border-top:1px solid #161616;font:italic 400 12.5px/1.4 var(--serif);color:#6a6a6a}
+.panel .close{position:absolute;top:7px;right:7px;width:44px;height:44px;padding:0;border:0;border-radius:999px;font-size:17px;line-height:44px;color:#5d5d5d;background:none;cursor:pointer}
+.panel .close:hover{color:var(--fg)}
+.panel .credit{margin:14px 0 0;padding-top:10px;border-top:1px solid #161616;font:italic 400 12.5px/1.4 var(--serif);color:#8e8e8e}
 :focus-visible{outline:1px solid var(--accent);outline-offset:2px}
 textarea:focus-visible{outline:0}
 .tip{position:fixed;left:0;top:0;pointer-events:none;opacity:0;transition:opacity .2s;padding:12px 14px 10px;min-width:168px;
@@ -105,7 +114,7 @@ textarea:focus-visible{outline:0}
 .lbl.on{color:var(--accent)}
 .fallback{position:fixed;inset:0;display:none;place-items:center;color:var(--dim);font-size:14px;padding:32px;text-align:center}
 @media (max-width:720px){
-  header{padding:20px 18px 0;flex-direction:column;gap:6px}
+  header{padding:18px 16px 0;flex-direction:column;gap:6px}
   h1{font-size:25px;margin-bottom:8px}
   .caption{font-size:12.5px;line-height:1.55}
   .meta{text-align:left;white-space:normal}
@@ -119,7 +128,7 @@ textarea:focus-visible{outline:0}
   .composer{gap:10px}
   .tc-say{font-size:15.5px}
   .tourcap{min-height:62px}
-  .panel{top:auto;bottom:max(16px,env(safe-area-inset-bottom));right:16px}
+  .panel{top:auto;bottom:max(16px,env(safe-area-inset-bottom));right:16px;max-height:min(78%,calc(100% - 32px))}
   .tc-ex{font-size:12.5px}
   .tip{width:calc(100% - 32px);padding:11px 14px 9px}
   .tip .cols{grid-template-columns:1fr 1fr;gap:0 16px}
@@ -127,7 +136,43 @@ textarea:focus-visible{outline:0}
   .tip .row.lk,.tip .row.lk.all{grid-template-columns:32px auto 1fr 28px}
   .tip .row .c.ws{font-size:9px}
 }
-@media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+/* touch: 36px segments with a 44px-tall hit area, and 44px-tall hit areas on the pills (no layout change) */
+@media (pointer:coarse){
+  .seg{gap:4px}
+  .seg button{min-width:36px;height:36px;position:relative}
+  .seg button::after,#tour::after,#write::after{content:"";position:absolute;inset:-4px 0}
+  #tour,#write{position:relative}
+  #tour::after,#write::after{inset:-6px 0}
+}
+@media (max-width:720px){
+  header{padding:18px max(16px,env(safe-area-inset-right)) 0 max(16px,env(safe-area-inset-left))}
+  .dock{padding:0 max(16px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+  .tc-meta{font-size:11px;gap:10px}
+  .tc-dash i{width:12px}
+  .wl{font-size:11px}
+  .lbl{font-size:11px}
+  .tip .d{font-size:11px}
+  .tip .row .c.ws{font-size:11px}
+  .tip .row{grid-template-columns:44px 1fr 28px}
+  .tip .row.lk,.tip .row.lk.all{grid-template-columns:44px auto 1fr 28px}
+}
+@media (max-width:380px){ .tc-dash{display:none} }
+@media (max-width:360px) and (pointer:coarse){ .seg button{height:32px} .seg button::after{inset:-6px 0} }  /* "1 / 5" already counts the steps; keeps the hint on the same line */
+/* short landscape (phones on their side): the title stays, the caption goes, the dock tightens, so the stack keeps a usable band */
+@media (max-height:500px) and (orientation:landscape){
+  header{padding-top:14px}
+  h1{font-size:24px;margin-bottom:0}
+  .caption{display:none}
+  .dock{gap:6px;padding-bottom:max(10px,env(safe-area-inset-bottom))}
+  .composer{padding-top:8px}
+  textarea{font-size:16px;height:48px}
+  .tourcap{padding-top:8px}
+  .lbl,.wl,.tc-meta{font-size:11px}
+  .tc-say{font-size:15px}
+  .tc-ex{font-size:12.5px}
+  .panel{top:12px;max-height:calc(100% - 24px)}
+}
+@media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important} }
 </style>
 </head>
 <body>
@@ -139,10 +184,11 @@ textarea:focus-visible{outline:0}
       Each glowing arc is one letter looking back at an earlier one; the brighter the arc, the harder it looks.
       Four layers stack upward, and the top row is the model’s guess at <b>what comes next</b>.</p>
   </div>
-  <div class="meta"><div id="meta"></div><button class="made" id="made" aria-expanded="false" aria-controls="panel">How it was made</button></div>
+  <div class="meta"><div id="meta"></div><button class="made" id="made" aria-expanded="false" aria-controls="panel">How it works</button></div>
 </header>
-<div class="panel" id="panel" role="dialog" aria-label="How it was made">
-  <h2>How it was made</h2>
+<div class="panel" id="panel" role="dialog" aria-modal="false" aria-labelledby="panel-h">
+  <button class="close" id="close" aria-label="Close">&times;</button>
+  <h2 id="panel-h" tabindex="-1">How it works</h2>
   <ul id="made-list"></ul>
   <p class="credit">Built with Claude for Joe Gao.</p>
 </div>
@@ -159,7 +205,7 @@ textarea:focus-visible{outline:0}
       <button id="write" aria-pressed="false">Write</button>
     </div>
     <div class="tourcap" id="tourcap" aria-live="polite">
-      <div class="tc-meta"><span id="tc-where"></span><span class="tc-dash" id="tc-dash"></span></div>
+      <div class="tc-meta"><span id="tc-where"></span><span class="tc-stop"><span class="k-touch">tap to stop</span><span class="k-mouse">click or Esc to stop</span></span><span class="tc-dash" id="tc-dash"></span></div>
       <p class="tc-say" id="tc-say"></p>
       <p class="tc-ex" id="tc-ex"></p>
     </div>
@@ -559,6 +605,7 @@ const wLabels = [0, 1, 2].map(() => { const d = document.createElement('div'); d
 
 // ---------- layout ----------
 let W = 1, Hh = 1, dprCap = 2;
+view.lh0 = view.tlh = LH;   // the layer height layout() chose; the tour may lower LH toward a target on short phones
 function layout() {
   W = innerWidth; Hh = innerHeight;
   const narrow = W < 720 || W / Hh < 0.9;
@@ -572,9 +619,11 @@ function layout() {
   camera.aspect = W / Hh;
   // keep the stack in the free band between the caption and the dock. On a phone the band is measured, the
   // left margin only holds the layer labels, and the layers grow taller to use the height the width leaves.
-  const top = narrow ? document.querySelector('header').getBoundingClientRect().bottom + 16 : 150;
-  const bottom = narrow ? Hh - document.querySelector('.dock').getBoundingClientRect().top + 12 : 150;
-  const free = Math.max(0.35, (Hh - top - bottom) / Hh);
+  const short = Hh < 500;   // a phone on its side: measure the band too
+  if (tour) document.body.classList.remove('tourtight');   // the base layout is measured with the caption in place
+  const top = narrow || short ? document.querySelector('header').getBoundingClientRect().bottom + (short ? 10 : 16) : 150;
+  const bottom = narrow || short ? Hh - document.querySelector('.dock').getBoundingClientRect().top + (short ? 8 : 12) : 150;
+  const free = Math.max(0.28, (Hh - top - bottom) / Hh);   // 0.28 (was 0.35): on a 568 px phone the stack would otherwise spill over the caption
   const mL = 3.0, mR = narrow ? 0.8 : 3.0;                      // margins in slots: left holds the labels
   const halfW = (nN * SX + mL + mR) / 2;
   const tv = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
@@ -583,10 +632,14 @@ function layout() {
   const halfH = (L * nLH) / 2 + 1.4;
   view.dist = Math.max(distW, halfH / (tv * free) * 1.04);
   const unitPx = Hh / (2 * view.dist * tv);
-  camera.setViewOffset(W, Hh, ((mR - mL) / 2) * unitPx, (bottom - top) / 2, W, Hh);
+  view.ox = ((mR - mL) / 2) * unitPx; view.oy0 = (bottom - top) / 2; view.bandTop = top; view.fitBand = narrow || short;
+  view.oy = view.toy = view.oy0;
+  camera.setViewOffset(W, Hh, view.ox, view.oy, W, Hh);
   camera.updateProjectionMatrix();
-  if (nN !== N || nLH !== LH) {
-    N = nN; LH = nLH; U.uN.value = N; U.uLH.value = LH;
+  if (tour) tourFit(true);
+  if (!tour) { LH = view.tlh = nLH; U.uLH.value = LH; }
+  if (nN !== N || nLH !== view.lh0) {
+    N = nN; LH = view.lh0 = view.tlh = nLH; U.uN.value = N; U.uLH.value = LH;
     buildArcs(); buildStreams(); buildGlyphs();
     if (state.probs) applyState(false);
   }
@@ -731,8 +784,12 @@ $('made-list').innerHTML = [
   `Runs entirely <b>in your browser</b>: a Web Worker does the arithmetic and three.js draws it.`,
 ].map((l) => `<li>${l}</li>`).join('');
 const panel = $('panel'), madeBtn = $('made');
-function setPanel(on) { panel.classList.toggle('on', on); madeBtn.setAttribute('aria-expanded', String(on)); }
+function setPanel(on) {
+  panel.classList.toggle('on', on); madeBtn.setAttribute('aria-expanded', String(on));
+  if (on) $('panel-h').focus({ preventScroll: true }); else if (panel.contains(document.activeElement)) madeBtn.focus();
+}
 madeBtn.addEventListener('click', (e) => { e.stopPropagation(); setPanel(!panel.classList.contains('on')); });
+$('close').addEventListener('click', () => setPanel(false));
 addEventListener('pointerdown', (e) => { if (panel.classList.contains('on') && !panel.contains(e.target) && e.target !== madeBtn) setPanel(false); });
 
 // ---------- tour: five measured findings (numbers from train/tour.py, on held-out text) ----------
@@ -768,7 +825,7 @@ function wordAround(w, t) {
 }
 function tourExample() {
   const ex = $('tc-ex');
-  if (!tour || !state.att || state.visible.join('') !== DEMO.slice(-CTX)) { ex.innerHTML = ''; return; }
+  if (!tour || !state.att || state.visible.join('') !== DEMO.slice(-CTX)) { ex.innerHTML = ''; tourFit(); return; }
   const st = STEPS[tour.step], T = state.ctxLen, w = state.visible, t = T - 1, A = state.att;
   setFocus(N - 1, false);
   const a = (s) => A[((st.l * H + st.h) * T + t) * T + s];
@@ -789,7 +846,61 @@ function tourExample() {
     say = `After ${q(w[t])} of “${esc(wordAround(w, t))}”, its first guess is ${q(chars[bi]).replace('the line break', 'a line break').replace('the space', 'a space')} (<b>${pct(state.probs[pb + bi])}</b>).`;
   }
   ex.innerHTML = say;
+  tourFit();
 }
+// On a short phone the tour caption (three or four lines) is taller than the composer and the controls it
+// replaces, and would cover the bottom row and its percentages. While the tour runs, the stack is fitted into
+// the band between the header and the caption's top instead: it moves up, and if that is not enough the layers
+// are drawn closer together (down to the desktop spacing, so the letters keep their size), and then the step's
+// camera pulls back (about 6% on the iPhone SE's first step). On a phone shorter still, where that pull-back
+// would pass 15%, the header's caption steps aside for the rest of the tour (body.tourtight) and the stack is
+// fitted again in the taller band. Everything is computed by projecting the rows from the step's target camera,
+// and eased by frame(). Where the stack already clears the caption (iPhone 13, desktop) nothing moves.
+const fitCam = new THREE.PerspectiveCamera();
+function tourFit(now) {
+  document.body.classList.toggle('tourtight', !!(tour && tour.tight));
+  if (!tour || !view.fitBand) { view.toy = view.oy0; view.tlh = view.lh0; return; }
+  const st = STEPS[tour.step], wlH = 13;
+  // the rows that must stay clear: the guesses on top (and NEXT), the letters and their percentages below
+  const span = (lh, m, oy) => {
+    fitCam.copy(camera); const r = view.dist * st.cam[2] * m;
+    fitCam.position.set(Math.sin(st.cam[0]) * Math.cos(st.cam[1]) * r, Math.sin(st.cam[1]) * r, Math.cos(st.cam[0]) * Math.cos(st.cam[1]) * r);
+    fitCam.lookAt(0, 0, 0); fitCam.updateMatrixWorld(); fitCam.setViewOffset(W, Hh, view.ox, oy, W, Hh); fitCam.updateProjectionMatrix();
+    const yT = (L / 2) * lh + 0.55 + 0.5 * GS * SX, yB = -(L / 2) * lh - 0.55 - 0.62 * GS * SX;
+    let a = 1e9, b = -1e9;
+    for (const x of [slotXw(0), slotXw(N - 1)]) {
+      v3.set(x, yT, 0).project(fitCam); a = Math.min(a, (-v3.y * 0.5 + 0.5) * Hh);
+      v3.set(x, yB, 0).project(fitCam); b = Math.max(b, (-v3.y * 0.5 + 0.5) * Hh + wlH);
+    }
+    return [a, b];
+  };
+  const solve = () => {
+    const top = document.querySelector('header').getBoundingClientRect().bottom + (Hh < 500 ? 10 : 16);
+    const want = $('tourcap').getBoundingClientRect().top - 4, mid = (top + want) / 2;
+    const fit = (lh, m) => {   // centre the stack in the band; does it fit?
+      let oy = view.oy0;
+      for (let i = 0; i < 3; i++) { const [a, b] = span(lh, m, oy); oy += (a + b) / 2 - mid; }
+      const [a, b] = span(lh, m, oy);
+      return { ok: b - a <= want - top + 0.5, oy };
+    };
+    let lh = view.lh0, m = 1, oy = view.oy0;
+    if (span(lh, m, oy)[1] <= want) return { lh, m, oy, ok: true };
+    const minLH = Math.min(2.6, view.lh0);
+    let ok = true;
+    if (fit(lh, 1).ok) { /* moving up is enough */ }
+    else if (fit(minLH, 1).ok) { let lo = minLH, hi = lh; for (let i = 0; i < 14; i++) { const c = (lo + hi) / 2; if (fit(c, 1).ok) lo = c; else hi = c; } lh = lo; }
+    else { ok = false; lh = minLH; let lo = 1, hi = 3; for (let i = 0; i < 14; i++) { const c = (lo + hi) / 2; if (fit(lh, c).ok) hi = c; else lo = c; } m = hi; }
+    return { lh, m, oy: fit(lh, m).oy, ok };
+  };
+  let f = solve();
+  if (!tour.tight && f.m > 1.15 && getComputedStyle(document.querySelector('.caption')).display !== 'none') { tour.tight = true; document.body.classList.add('tourtight'); f = solve(); }
+  view.toy = f.oy; view.tlh = f.lh; view.tzoom = st.cam[2] * f.m;
+  if (now) {
+    view.zoom = view.tzoom; view.oy = f.oy; LH = f.lh; U.uLH.value = LH;
+    camera.setViewOffset(W, Hh, view.ox, f.oy, W, Hh); camera.updateProjectionMatrix(); dirty = true;
+  }
+}
+
 function tourStep(n) {
   tour.step = n;
   const st = STEPS[n];
@@ -820,9 +931,9 @@ function endTour() {
   if (!tour) return;
   clearTimeout(tour.timer); removeEventListener('pointerdown', endTour, true);
   const t = tour; tour = null;
-  document.body.classList.remove('touring'); setFocus(-1); $('tc-ex').innerHTML = '';
+  document.body.classList.remove('touring', 'tourtight'); setFocus(-1); $('tc-ex').innerHTML = '';
   setLayer(t.mode.layer); syncLayers(); mode.head = t.mode.head; syncHeads();
-  view.taz = HOME.az; view.tel = HOME.el; view.tzoom = 1; idleT = 0;
+  view.taz = HOME.az; view.tel = HOME.el; view.tzoom = 1; idleT = 0; view.toy = view.oy0; view.tlh = view.lh0;
   text = t.saved; shownText = ''; requestRun(text);
 }
 $('tour').addEventListener('click', startTour);
@@ -933,6 +1044,14 @@ function frame(now) {
   const sway = rm || drag ? 0 : Math.sin(now * 0.00012) * 0.1 * Math.min(1, idleT / 4);
   const kc = rm ? 1 : 1 - Math.exp(-dt * 6);
   view.az += (view.taz - view.az) * kc; view.el += (view.tel - view.el) * kc; view.zoom += (view.tzoom - view.zoom) * kc;
+  if (view.toy !== undefined && Math.abs(view.toy - view.oy) > 0.05) {   // the tour's shift on short phones, eased like the orbit
+    view.oy += (view.toy - view.oy) * kc; if (Math.abs(view.toy - view.oy) <= 0.05) view.oy = view.toy;
+    camera.setViewOffset(W, Hh, view.ox, view.oy, W, Hh); camera.updateProjectionMatrix(); dirty = true;
+  }
+  if (Math.abs(view.tlh - LH) > 1e-4) {   // and its layer spacing (the arcs read uLH in the shader: nothing to rebuild)
+    LH += (view.tlh - LH) * kc; if (Math.abs(view.tlh - LH) <= 1e-4) LH = view.tlh;
+    U.uLH.value = LH; dirty = true;
+  }
   const r = view.dist * view.zoom, az = view.az + sway, el = view.el;
   // redraw for camera motion only once it would move the picture by about half a pixel
   if (Math.abs(az - camLast.az) + Math.abs(el - camLast.el) > 4e-4 || Math.abs(r - camLast.r) > r * 2e-4) dirty = true;
@@ -958,14 +1077,23 @@ function frame(now) {
     g.material.color.copy(WHITE).lerp(ACCENT, s === focus ? 1 : Math.max(hot, g.userData.mark ? (focus >= 0 ? 0.5 : 1) : 0));
     const gs = GS * SX * (s === focus ? 1.15 : 1 + 0.22 * hot); g.scale.set(gs, gs, 1); p.scale.set(GS * SX, GS * SX, 1);
   }
+  const wl = [];
   for (let n = 0; n < 3; n++) {
     const d = wLabels[n], j = focusTop[n];
     if (j === undefined) { if (d.classList.contains('on')) d.classList.remove('on'); continue; }
     const [x, y] = toScreen(slotXw(j), levelYw(0) - 0.55 - 0.62 * GS * SX, 0);
-    const txt = Math.round(focusW[j] * 100) + '%'; if (d.textContent !== txt) d.textContent = txt;
-    d.style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px) translate(-50%,0)`;
+    const txt = Math.round(focusW[j] * 100) + '%'; if (d.textContent !== txt) { d.textContent = txt; d._w = 0; }
+    if (!d._w) d._w = d.offsetWidth || 24;
+    wl.push({ d, x, y });
     if (!d.classList.contains('on')) d.classList.add('on');
   }
+  // neighbouring letters can both be in the top three: push their labels apart so "27%43%" reads as two numbers
+  wl.sort((a, b) => a.x - b.x);
+  for (let it = 0; it < 4; it++) for (let i = 1; i < wl.length; i++) {
+    const a = wl[i - 1], b = wl[i], need = (a.d._w + b.d._w) / 2 + 5 - (b.x - a.x);
+    if (need > 0) { a.x -= need / 2; b.x += need / 2; }
+  }
+  for (const { d, x, y } of wl) d.style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px) translate(-50%,0)`;
   // labels (DOM): write a transform only when it moved
   const lx = slotXw(U.uFirst.value) - 1.1 * SX;
   const place = (el, n, x, y) => {
