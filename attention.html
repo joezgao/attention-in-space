@@ -30,12 +30,12 @@ header{position:fixed;top:0;left:0;right:0;padding:28px max(32px,env(safe-area-i
 h1{font-family:var(--serif);font-weight:400;font-style:italic;font-size:30px;letter-spacing:-.01em;margin:0 0 12px;line-height:1.1}
 .caption{margin:0;max-width:480px;font-size:13px;line-height:1.62;color:var(--dim)}
 .caption b{color:var(--fg);font-weight:500}
-.meta{font-size:11px;letter-spacing:.04em;color:#5d5d5d;text-align:right;line-height:1.7;white-space:nowrap;font-variant-numeric:tabular-nums}
+.meta{font-size:11px;letter-spacing:.04em;color:#767676;text-align:right;line-height:1.7;white-space:nowrap;font-variant-numeric:tabular-nums}
 .meta span{color:var(--dim)}
 .dock{position:fixed;left:0;right:0;bottom:0;padding:0 max(32px,env(safe-area-inset-right)) max(26px,env(safe-area-inset-bottom)) max(32px,env(safe-area-inset-left));display:flex;flex-direction:column;align-items:center;gap:14px;pointer-events:none}
 .controls{display:flex;gap:28px;align-items:center;pointer-events:auto;flex-wrap:wrap;justify-content:center}
 .seg{display:flex;align-items:center;gap:2px}
-.seg-label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#5d5d5d;margin-right:8px}
+.seg-label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#767676;margin-right:8px}
 .seg button{font:500 12px/1 var(--sans);color:var(--dim);background:none;border:0;padding:8px 9px;border-radius:999px;cursor:pointer;
   font-variant-numeric:tabular-nums;transition:color .25s,background .25s;min-width:30px}
 .seg button:hover{color:var(--fg)}
@@ -55,7 +55,7 @@ textarea::placeholder{color:#555}
 .bottom{position:relative;width:min(760px,100%);pointer-events:auto}
 .composer,.tourcap{transition:opacity .5s}
 .tourcap{position:absolute;left:0;right:0;bottom:0;opacity:0;pointer-events:none;border-top:1px solid var(--line);padding-top:14px;min-height:66px}
-.tc-meta{display:flex;align-items:center;gap:14px;font:500 10.5px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:#5d5d5d;margin-bottom:9px}
+.tc-meta{display:flex;align-items:center;gap:14px;font:500 10.5px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:#767676;margin-bottom:9px}
 .tc-meta b{color:var(--accent);font-weight:500}
 .tc-stop{color:#8b8b8b;white-space:nowrap}
 .tc-stop .k-touch{display:none}
@@ -73,7 +73,7 @@ body.touring .composer{opacity:0;pointer-events:none}
 body.touring .tourcap{opacity:1}
 /* a short phone in the tour: the header's caption steps aside so the stack keeps its size above the tour's caption */
 body.touring.tourtight .caption{display:none}
-.made{position:relative;pointer-events:auto;font:inherit;letter-spacing:inherit;color:#5d5d5d;background:none;border:0;padding:0;margin-top:2px;cursor:pointer;
+.made{position:relative;pointer-events:auto;font:inherit;letter-spacing:inherit;color:#767676;background:none;border:0;padding:0;margin-top:2px;cursor:pointer;
   text-decoration:underline;text-decoration-color:#2e2e2e;text-underline-offset:3px;transition:color .25s}
 .made:hover,.made[aria-expanded="true"]{color:var(--fg)}
 .made::after{content:"";position:absolute;inset:-13px -8px}
@@ -87,7 +87,7 @@ body.touring.tourtight .caption{display:none}
 .panel li{font-size:12.5px;line-height:1.55;color:var(--dim);padding:5px 0;border-top:1px solid #161616}
 .panel li:first-child{border-top:0}
 .panel li b{color:var(--fg);font-weight:500}
-.panel .close{position:absolute;top:7px;right:7px;width:44px;height:44px;padding:0;border:0;border-radius:999px;font-size:17px;line-height:44px;color:#5d5d5d;background:none;cursor:pointer}
+.panel .close{position:absolute;top:7px;right:7px;width:44px;height:44px;padding:0;border:0;border-radius:999px;font-size:17px;line-height:44px;color:#767676;background:none;cursor:pointer}
 .panel .close:hover{color:var(--fg)}
 .panel .credit{margin:14px 0 0;padding-top:10px;border-top:1px solid #161616;font:italic 400 12.5px/1.4 var(--serif);color:#8e8e8e}
 :focus-visible{outline:1px solid var(--accent);outline-offset:2px}
