@@ -75,7 +75,7 @@ A sample at temperature 0.8, after the prompt *"ROMEO: But soft, what light thro
 - `attention.html`: the piece
 - `screenshots/`: typing, generating, an orbited view, the phone layout, the Tour, hovering a letter (v3), a Tour step (v3) and the v3 phone layout
 
-The NumPy training, gradient-check and export scripts are not in this repository yet.
+The NumPy training, gradient-check and export scripts were lost and are not included in this repository. The trained weights the page uses are inlined in the HTML.
 
 ## Credits and license
 
