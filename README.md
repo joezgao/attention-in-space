@@ -12,7 +12,7 @@ It follows [micrograd 3D](https://github.com/joezgao/micrograd-3d): micrograd sh
 
 ## Open it
 
-Open `attention.html` in a recent browser. It is a single 1.20 MB file with the model weights inlined; it needs an internet connection to load three.js and two fonts. If your browser blocks local files:
+Open `attention.html` in a recent browser. It is two files that must sit side by side: `attention.html` (20 kB, the page) and `attention.js` (1.18 MB, the model weights and the code, loaded after the page has painted). It needs an internet connection to load three.js and two fonts. If your browser blocks local files:
 
 ```bash
 python3 -m http.server 8000   # then open http://localhost:8000/attention.html
@@ -45,7 +45,7 @@ No head was found for an induction pattern, the same letter earlier, or the star
 | Size | 4 layers, 4 heads, d_model 128, context 64 characters, vocab 65, **809,856 parameters** |
 | Data | tiny-shakespeare (1,115,394 characters, from `karpathy/char-rnn`), split 90/10 into train and validation |
 | Validation loss | **1.527** at the best checkpoint (step 6000, fp32). The shipped int8 weights score **1.531** on a larger fixed sample of validation windows; the page shows that number. |
-| Shipped weights | int8 with one fp32 scale per row (845 kB), base64-inlined. Quantising changed the loss by +0.0003. |
+| Shipped weights | int8 with one fp32 scale per row (845 kB), base64, in `attention.js`. Quantising changed the loss by +0.0003. |
 
 **Training.** The model was written in pure NumPy with a hand-derived backward pass, following nanoGPT's `model.py` op for op (backward written layer by layer in the style of llm.c), and every parameter group was checked against finite differences. The recipe is nanoGPT's `train_shakespeare_char`, scaled down: AdamW (β 0.9, 0.99; weight decay 0.1 on matrices), lr 2e-3 with a 200-step warmup and cosine decay to 2e-4, gradient clipping at 1.0, batch 32 × 64 tokens, no dropout, 7,000 steps. It took 32 minutes on 2 CPU cores; validation loss was best at step 6000 and had started to overfit slightly by 7000 (1.530).
 
@@ -72,7 +72,8 @@ A sample at temperature 0.8, after the prompt *"ROMEO: But soft, what light thro
 
 ## In this repository
 
-- `attention.html`: the piece
+- `attention.html`: the page
+- `attention.js`: the model weights and the code that runs them (split out on 2026-11-09 so the page paints first: Lighthouse mobile performance 70 → 99, first paint 4.8 s → 0.6 s, simulated throttling, served gzipped)
 - `screenshots/`: typing, generating, an orbited view, the phone layout, the Tour, hovering a letter (v3), a Tour step (v3) and the v3 phone layout
 
 The NumPy training, gradient-check and export scripts were lost and are not included in this repository. The trained weights the page uses are inlined in the HTML.
