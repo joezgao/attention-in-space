@@ -12,6 +12,8 @@ It follows [micrograd 3D](https://github.com/joezgao/micrograd-3d): micrograd sh
 
 ## Open it
 
+**Live:** [joezgao.github.io/attention-in-space/attention.html](https://joezgao.github.io/attention-in-space/attention.html) (nothing to install).
+
 Open `attention.html` in a recent browser. It is two files that must sit side by side: `attention.html` (20 kB, the page) and `attention.js` (1.18 MB, the model weights and the code, loaded after the page has painted). It needs an internet connection to load three.js and two fonts. If your browser blocks local files:
 
 ```bash
