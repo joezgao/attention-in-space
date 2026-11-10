@@ -78,7 +78,15 @@ A sample at temperature 0.8, after the prompt *"ROMEO: But soft, what light thro
 - `attention.js`: the model weights and the code that runs them (split out on 2026-11-09 so the page paints first: Lighthouse mobile performance 70 → 99, first paint 4.8 s → 0.6 s, simulated throttling, served gzipped)
 - `screenshots/`: typing, generating, an orbited view, the phone layout, the Tour, hovering a letter (v3), a Tour step (v3) and the v3 phone layout
 
-The NumPy training, gradient-check and export scripts were lost and are not included in this repository. The trained weights the page uses are inlined in the HTML.
+The NumPy training, gradient-check and export scripts were lost and are not included in this repository. The trained weights the page uses are in `attention.js`.
+
+The numbers above can still be checked from those shipped weights. `analysis/` re-implements the forward pass in NumPy and reads the weights straight from `attention.js`:
+
+- `python analysis/logit_lens.py attention.js analysis/hamlet-3-1.txt` reads out the next-letter guess after each block (on this passage: top-1 0.543, 2.11 bits per letter after block 4).
+- `python analysis/head_shares.py attention.js analysis/hamlet-3-1.txt analysis/logit_lens.py` measures the four heads in the table (on this passage: 62%, 88%, 72%, 71%; the table's numbers come from 4,096 held-out windows, so they differ a little).
+- `python analysis/head_ablation.py attention.js analysis/hamlet-3-1.txt` turns off one head at a time and reports the change in bits per letter.
+
+They need NumPy. `hamlet-3-1.txt` is a public-domain passage from Hamlet.
 
 ## Credits and license
 
