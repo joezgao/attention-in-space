@@ -61,8 +61,8 @@ A sample at temperature 0.8, after the prompt *"ROMEO: But soft, what light thro
 
 ## How the page works
 
-- Two files: `attention.html` (the page) and `attention.js` (the weights and the model code), loaded after the page paints. three.js 0.147.0 loads from jsDelivr; Lora and Inter load from Google Fonts.
-- The forward pass is plain JavaScript in an inline Web Worker (its source sits in `attention.html`), so the 3D view never waits for the model. Each new character re-runs the last 64 characters and returns every layer's attention matrices and the next-character probabilities.
+- Two files: `attention.html` (layout, styles and the worker) and `attention.js` (the model weights and the page script, about 1.2 MB, loaded with `defer`). three.js 0.147.0 loads from jsDelivr; Lora and Inter load from Google Fonts.
+- The forward pass is plain JavaScript in an inline Web Worker, so the 3D view never waits for the model. Each new character re-runs the last 64 characters and returns every layer's attention matrices and the next-character probabilities.
 - The arcs are instanced ribbons with widths computed in screen space in the vertex shader. Attention weights ease on the CPU; arcs too faint to see are dropped (usually about 400 of 2,112 remain), and the page only draws a frame when the picture changes.
 
 ## Limits
