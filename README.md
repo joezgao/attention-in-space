@@ -67,7 +67,7 @@ A sample at temperature 0.8, after the prompt *"ROMEO: But soft, what light thro
 
 ## Limits
 
-- 60 fps is not verified on a real GPU. It was only measured with software WebGL on 2 busy CPU cores: 10–14.5 fps at 1440 × 900 while writing (v1 managed 0.3–0.7). On a GPU the arcs are about 400 instanced ribbons (roughly 6k vertices) a frame, so 60 fps should be easy, but it needs checking on real hardware.
+- 60 fps is measured on one GPU only: an Apple M5 Pro, headless Chromium 155 over Metal, 1440 × 900 at device pixel ratio 1, while dragging the view so 291 of 300 frames redraw. Main-thread JavaScript per frame: median 0.6 ms, p95 0.8 ms. Retina density (the page caps it at 1.5) and other GPUs are not measured. With software WebGL on 2 busy CPU cores it managed 10–14.5 fps (v1: 0.3–0.7).
 - It is a 0.8M-parameter model with 64 characters of context: mostly right spelling and the right form (speaker names, line breaks), but the meaning is nonsense.
 - Only attention within the visible window is drawn; attention to characters that have scrolled out of view is not shown.
 - Characters outside the training vocabulary (most digits, for example) are dropped from what you type.
