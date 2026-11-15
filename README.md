@@ -68,6 +68,7 @@ A sample at temperature 0.8, after the prompt *"ROMEO: But soft, what light thro
 ## Limits
 
 - 60 fps is measured on one GPU only: an Apple M5 Pro, headless Chromium 155 over Metal, 1440 × 900 at device pixel ratio 1, while dragging the view so 291 of 300 frames redraw. Main-thread JavaScript per frame: median 0.6 ms, p95 0.8 ms. Retina density (the page caps it at 1.5) and other GPUs are not measured. With software WebGL on 2 busy CPU cores it managed 10–14.5 fps (v1: 0.3–0.7).
+- Typing on a simulated slow phone (same Mac, 390 × 844 at device pixel ratio 3, the page's main thread slowed 4× or 6× with Chrome's CPU throttle, and the model run 4 or 6 times per character because that throttle does not reach Web Workers): the frame showing the new attention arrives a median 77 ms (4×) or 109 ms (6×) after the key press, 47 ms unthrottled (24 keys, 150 ms apart). The view stays at 60 fps throughout, and no key or input event takes 16 ms or longer. This is an emulation, not a real phone.
 - It is a 0.8M-parameter model with 64 characters of context: mostly right spelling and the right form (speaker names, line breaks), but the meaning is nonsense.
 - Only attention within the visible window is drawn; attention to characters that have scrolled out of view is not shown.
 - Characters outside the training vocabulary (most digits, for example) are dropped from what you type.
