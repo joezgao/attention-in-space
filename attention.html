@@ -11,11 +11,12 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500&display=swap"></noscript>
 <style>
+@font-face{font-family:"Inter fallback";src:local("Arial"),local("ArialMT");size-adjust:106.8%;ascent-override:90.4%;descent-override:22.5%;line-gap-override:0%}
 :root{
   --bg:#000; --fg:#efefef; --dim:#8b8b8b; --faint:#3b3b3b; --line:#1c1c1c;
   --accent:#ffb547; --accent-soft:rgba(255,181,71,.14);
   --serif:"Lora",Georgia,"Times New Roman",serif;
-  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  --sans:"Inter","Inter fallback",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
   color-scheme:dark;
 }
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg:#000; --fg:#efefef; } }
