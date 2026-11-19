@@ -434,9 +434,12 @@ input.addEventListener('input', () => {
 
 // ---------- controls ----------
 function segButtons(el, items, get, set) {
-  const btns = items.map(([label, val, aria]) => {
-    const b = document.createElement('button'); b.textContent = label; b.setAttribute('aria-label', aria);
-    b.addEventListener('click', () => { set(val); sync(); }); el.appendChild(b); return [b, val];
+  // Reuse the buttons written in the page (they hold the dock's height before this script loads) when they match.
+  let pre = [...el.querySelectorAll('button')];
+  if (pre.length !== items.length || pre.some((b, i) => b.textContent !== items[i][0])) { pre.forEach((b) => b.remove()); pre = []; }
+  const btns = items.map(([label, val, aria], i) => {
+    const b = pre[i] || document.createElement('button'); b.textContent = label; b.setAttribute('aria-label', aria);
+    b.addEventListener('click', () => { set(val); sync(); }); if (!pre[i]) el.appendChild(b); return [b, val];
   });
   const sync = () => btns.forEach(([b, v]) => b.setAttribute('aria-pressed', String(get() === v)));
   sync(); return sync;

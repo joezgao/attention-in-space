@@ -11,11 +11,12 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500&display=swap"></noscript>
 <style>
+@font-face{font-family:"Inter fallback";src:local("Arial"),local("ArialMT");size-adjust:106.8%;ascent-override:90.4%;descent-override:22.5%;line-gap-override:0%}
 :root{
   --bg:#000; --fg:#efefef; --dim:#8b8b8b; --faint:#3b3b3b; --line:#1c1c1c;
   --accent:#ffb547; --accent-soft:rgba(255,181,71,.14);
   --serif:"Lora",Georgia,"Times New Roman",serif;
-  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  --sans:"Inter","Inter fallback",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
   color-scheme:dark;
 }
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg:#000; --fg:#efefef; } }
@@ -199,9 +200,10 @@ textarea:focus-visible{outline:0}
   <p class="credit">Built with Claude for Joe Gao.</p>
 </div>
 <div class="dock">
+  <!-- The buttons are in the markup so the dock has its final height at first paint; attention.js wires them (and rebuilds them if the model's layer or head count ever changes). -->
   <div class="controls">
-    <div class="seg" id="layers" role="group" aria-label="Layer"><span class="seg-label">Layer</span></div>
-    <div class="seg" id="heads" role="group" aria-label="Head"><span class="seg-label">Head</span></div>
+    <div class="seg" id="layers" role="group" aria-label="Layer"><span class="seg-label">Layer</span><button aria-label="All layers" aria-pressed="true">All</button><button aria-label="Layer 1" aria-pressed="false">1</button><button aria-label="Layer 2" aria-pressed="false">2</button><button aria-label="Layer 3" aria-pressed="false">3</button><button aria-label="Layer 4" aria-pressed="false">4</button></div>
+    <div class="seg" id="heads" role="group" aria-label="Head"><span class="seg-label">Head</span><button aria-label="Head 1" aria-pressed="false">1</button><button aria-label="Head 2" aria-pressed="false">2</button><button aria-label="Head 3" aria-pressed="false">3</button><button aria-label="Head 4" aria-pressed="false">4</button><button aria-label="Average of all heads" aria-pressed="true">Avg</button></div>
   </div>
   <div class="bottom">
     <div class="composer">
