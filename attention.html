@@ -193,11 +193,13 @@ textarea:focus-visible{outline:0}
   ::selection{background:rgba(128,128,128,.35)}
   button:active:not(:disabled){filter:brightness(.85)}
 </style>
+<style>.jg-home{display:block;width:fit-content;margin:-12px 0 -8px;padding:12px 0;font-size:13px;line-height:20px;letter-spacing:.02em;color:inherit;opacity:.6;text-decoration:underline;text-underline-offset:3px;transition:opacity .2s ease}.jg-home:hover,.jg-home:focus-visible{opacity:1}.jg-home:focus-visible{outline:1px solid currentColor;outline-offset:3px}</style>
 </head>
 <body>
 <canvas id="stage" aria-label="3D view of the model's attention"></canvas>
 <header>
   <div>
+    <a class="jg-home" href="https://joezgao.github.io/work/">← Joe Gao</a>
     <h1>Attention, in space</h1>
     <p class="caption">A tiny GPT trained on Shakespeare reads the letters along the bottom.
       Each glowing arc is one letter looking back at an earlier one; the brighter the arc, the harder it looks.
