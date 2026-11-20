@@ -44,6 +44,8 @@ h1{font-family:var(--serif);font-weight:400;font-style:italic;font-size:30px;let
 .meta{font-size:11px;letter-spacing:.04em;color:#767676;text-align:right;line-height:1.7;white-space:nowrap;font-variant-numeric:tabular-nums}
 .meta span{color:var(--dim)}
 .dock{position:fixed;left:0;right:0;bottom:0;padding:0 max(32px,env(safe-area-inset-right)) max(26px,env(safe-area-inset-bottom)) max(32px,env(safe-area-inset-left));display:flex;flex-direction:column;align-items:center;gap:14px;pointer-events:none}
+/* Under a slow link the first paint can land while the dock's markup is half parsed (one row tall, then full height a frame later). Keep it hidden until the parser has reached the element after it; browsers without :has() ignore this rule and show it as before. */
+.dock:not(:has(+ *)){visibility:hidden}
 .controls{display:flex;gap:28px;align-items:center;pointer-events:auto;flex-wrap:wrap;justify-content:center}
 .seg{display:flex;align-items:center;gap:2px}
 .seg-label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#767676;margin-right:8px}
